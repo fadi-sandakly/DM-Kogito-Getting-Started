@@ -38,6 +38,8 @@ mvn clean compile quarkus:dev
 Commit all files to Git.
 git add --all
 git commit -m "After building the project"
+git push
+
 
 ---- Deploy on OCP -----
 The BAM OE Kogito operator is already deployed.
@@ -59,10 +61,11 @@ spec:
 apiVersion: rhpam.kiegroup.org/v1
 kind: KogitoRuntime
 metadata:
-  name: my-kogito-demo-dm
+  name: weather-advice-quarkus
   namespace: dm-kogito
 spec:
   image: 'image-registry.openshift-image-registry.svc:5000/dm-kogito/weather-advice-quarkus'
   replicas: 1
   runtime: quarkus
 --------
+
