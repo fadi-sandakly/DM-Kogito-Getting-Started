@@ -35,3 +35,34 @@ access: http://localhost:8080/q/swagger-ui to execute the DMN model.
 You can do all in one step with Maven:
 mvn clean compile quarkus:dev
 
+Commit all files to Git.
+git add --all
+git commit -m "After building the project"
+
+---- Deploy on OCP -----
+The BAM OE Kogito operator is already deployed.
+
+---- The Build CR of BAM Kogito operator 
+apiVersion: rhpam.kiegroup.org/v1
+kind: KogitoBuild
+metadata:
+  name: weather-advice-quarkus
+  namespace: dm-kogito
+spec:
+  gitSource:
+    contextDir: WeatherAdvice
+    uri: 'https://github.com/fadi-sandakly/DM-Kogito-Getting-Started'
+  type: RemoteSource
+-----
+
+--------- 
+apiVersion: rhpam.kiegroup.org/v1
+kind: KogitoRuntime
+metadata:
+  name: my-kogito-demo-dm
+  namespace: dm-kogito
+spec:
+  image: 'image-registry.openshift-image-registry.svc:5000/dm-kogito/weather-advice-quarkus'
+  replicas: 1
+  runtime: quarkus
+--------
