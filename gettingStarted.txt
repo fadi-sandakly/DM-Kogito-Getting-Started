@@ -69,3 +69,44 @@ spec:
   runtime: quarkus
 --------
 
+Adding a webhook to the build from github (the webhook must be Generic)
+-----------------------------------------------------------------------
+---- 
+kind: Secret
+apiVersion: v1
+metadata:
+  name: git-webhook-secret
+  namespace: dm-kogito
+data:
+  WebHookSecretKey: MjQwM2FmMDk3NGE2YjE4NA==
+type: Opaque
+----
+----
+apiVersion: rhpam.kiegroup.org/v1
+kind: KogitoBuild
+metadata:
+  name: new-weather-advice-quarkus
+  namespace: dm-kogito
+  resourceVersion: '59537412'
+  uid: 89ae6821-f2eb-451c-8127-a6aad8788078
+spec:
+  gitSource:
+    contextDir: WeatherAdvice
+    uri: 'https://github.com/fadi-sandakly/DM-Kogito-Getting-Started'
+  type: RemoteSource
+  webHooks:
+    - secret: git-webhook-secret
+      type: Generic
+-----
+apiVersion: rhpam.kiegroup.org/v1
+kind: KogitoRuntime
+metadata:
+  name: new-weather-advice-quarkus
+  namespace: dm-kogito
+spec:
+  image: >-
+    image-registry.openshift-image-registry.svc:5000/dm-kogito/new-weather-advice-quarkus:latest
+  replicas: 1
+  runtime: quarkus
+----- Notice the "latest" in the end of the image name
+
